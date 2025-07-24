@@ -1,0 +1,251 @@
+{
+  "name": "Linked In Posting",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1GGJ5n7kRr8BM2na0QiJDJZFCMy1qOYrFCcIPkG-lThU",
+          "mode": "list",
+          "cachedResultName": "Linked In Post Creation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GGJ5n7kRr8BM2na0QiJDJZFCMy1qOYrFCcIPkG-lThU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 556181015,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GGJ5n7kRr8BM2na0QiJDJZFCMy1qOYrFCcIPkG-lThU/edit#gid=556181015"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f976e6fd-9919-4c46-9e91-3fd80c9d0736",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "8doR3YoT8S7WlsG1",
+          "name": "Main account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-nano-2025-04-14",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-NANO-2025-04-14"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are the best copywriter in the world and you are being given the name of the topic about which you have to create a LinkedIn post content. The post content must be interactive and enjoyable for the reader. It must have a hook which pulls the reader to read the entire post.\n\nYou have to write only the relevant matter of the topic given. \n\nYou can write it like a experience or a fact but remember to write it like a human and it should be like the usual Linked In post template. No emojis and stuff. Pure information and content\n\nDon't be generic and ask follow-up questions like what do you think and all. Be to the point and let them comment based on your post, don't beg for comments\n",
+              "role": "system"
+            },
+            {
+              "content": "=Here is the topic of which you have to write the content for a Linked In post:  {{ $json['What is the topic the post?'] }}\n\nRemember to write the content naturally and just like a human. No emojis. Express empathy and emotions as humans do.\n\nMake sure to give the output in JSON format only and the format should look like this: {\"hook\":\"This is the hook that is going to keep the audience engaged\",\"content\":\"This is the main body of the post\"}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        220,
+        0
+      ],
+      "id": "41b3131a-0d36-4912-a814-a7a95c40335f",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "C3MP1Dp6EMlN9O3B",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1GGJ5n7kRr8BM2na0QiJDJZFCMy1qOYrFCcIPkG-lThU",
+          "mode": "list",
+          "cachedResultName": "Linked In Post Creation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GGJ5n7kRr8BM2na0QiJDJZFCMy1qOYrFCcIPkG-lThU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 556181015,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1GGJ5n7kRr8BM2na0QiJDJZFCMy1qOYrFCcIPkG-lThU/edit#gid=556181015"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "What is the topic the post?": "={{ $('Google Sheets Trigger').item.json['What is the topic the post?'] }}",
+            "Hook": "={{ $json.message.content.hook }}",
+            "Content": "={{ $json.message.content.content }}"
+          },
+          "matchingColumns": [
+            "What is the topic the post?"
+          ],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "What is the topic the post?",
+              "displayName": "What is the topic the post?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Hook",
+              "displayName": "Hook",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Content",
+              "displayName": "Content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        600,
+        0
+      ],
+      "id": "8d0b49a1-2792-424b-a6be-2d93c8c9650c",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Uls14jlFq1y2V3bU",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "postAs": "organization",
+        "organization": "107836297",
+        "text": "={{ $json.Hook }}\n\n{{ $json.Content }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ],
+      "id": "23c0bd5d-60bc-4d67-bb1d-31af9d4693b4",
+      "name": "LinkedIn",
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "RHcrEOm0JEQvry0i",
+          "name": "LinkedIn account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "edbd15e4-c671-48d1-b32f-bd44fc5f25dd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "bb15867eb79ce1e55fdb60d950a74a97a22f15103b52b2440a52acbf0f1c0735"
+  },
+  "id": "VIs2JUkw0NMrNy49",
+  "tags": []
+}
